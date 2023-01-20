@@ -46,23 +46,29 @@ add the property
 
 2. Create a ca
 
+## From the middle to index query
 
+1. Add indexing model:
+  * create the package `org.infinispan.search`
+  * add java classes: `Author`, `Book`, `Review`, `BooksSchema`
 
-## Open Telemetry integration
+2. Show the schemas on Infinispan console
 
-## New Indexing annotations
+3. Create the cache `books` (startupMode => Purge, indexed entities => insights.book)
+  * download the file (xml)
 
-3. Create a schema
-```java
-@AutoProtoSchemaBuilder(includeClasses = {Book.class, Author.class, Review.class},
-      schemaFileName = "books-schema.proto",
-      schemaPackageName = "insights")
-interface BooksSchema extends GeneratedSchema {
-   
-}
+4. Copy file books.xml => main/resources/
+  * add to application.properties
+
+``` properties
+quarkus.infinispan-client.cache.books.configuration-uri=books.yaml
 ```
 
-Property to disable schema registration
-```properties
-quarkus.infinispan-client.use-schema-registration=false
+5. Create test/java directory
+  * create package `org.infinispan.search`
+  * copy `ModelGenerator` and `IndexedQueriesTest`
+
+6. Run the query test:
+``` sh
+./mvnw clean install
 ```
