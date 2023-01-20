@@ -7,6 +7,7 @@ This project is based on the following repositories:
 
 # Steps Building
 
+## Dev services
 1. Start Quarkus with Docker running
 ```bash
 ./mvnw quarkus:dev
@@ -29,5 +30,39 @@ This project is based on the following repositories:
 ```bash
 http localhost:8080/hello 
 ```
-5. 
 
+## Health Check
+
+1. Show that we have the Health Extension
+2. In the DEV UI access to the Health UI and show the Readiness Endpoint available
+3. Default enabled, can be disabled with
+```properties
+add the property
+```
+
+## Create Caches with configuration
+
+1. Open the model 
+
+2. Create a ca
+
+
+
+## Open Telemetry integration
+
+## New Indexing annotations
+
+3. Create a schema
+```java
+@AutoProtoSchemaBuilder(includeClasses = {Book.class, Author.class, Review.class},
+      schemaFileName = "books-schema.proto",
+      schemaPackageName = "insights")
+interface BooksSchema extends GeneratedSchema {
+   
+}
+```
+
+Property to disable schema registration
+```properties
+quarkus.infinispan-client.use-schema-registration=false
+```
