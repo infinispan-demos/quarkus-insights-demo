@@ -1,9 +1,9 @@
 package org.infinispan.data;
 
 import io.quarkus.logging.Log;
-import org.infinispan.model.Author;
-import org.infinispan.model.Book;
-import org.infinispan.model.Review;
+import org.infinispan.search.Author;
+import org.infinispan.search.Book;
+import org.infinispan.search.Review;
 
 import java.time.Instant;
 import java.util.Arrays;

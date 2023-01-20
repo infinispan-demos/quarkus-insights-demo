@@ -4,18 +4,15 @@ import io.quarkus.infinispan.client.Remote;
 import org.infinispan.client.hotrod.RemoteCache;
 import org.infinispan.client.hotrod.Search;
 import org.infinispan.data.ModelGenerator;
-import org.infinispan.model.Book;
 import org.infinispan.query.dsl.Query;
 import org.infinispan.query.dsl.QueryFactory;
-import org.infinispan.query.dsl.QueryResult;
+import org.infinispan.search.Book;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.Map;
 
