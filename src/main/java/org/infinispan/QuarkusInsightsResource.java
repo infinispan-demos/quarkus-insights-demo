@@ -1,20 +1,22 @@
 package org.infinispan;
 
-import io.quarkus.infinispan.client.Remote;
-import org.infinispan.client.hotrod.RemoteCache;
-import org.infinispan.client.hotrod.Search;
-import org.infinispan.data.ModelGenerator;
-import org.infinispan.query.dsl.Query;
-import org.infinispan.query.dsl.QueryFactory;
-import org.infinispan.search.Book;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.IntStream;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
-import java.util.Map;
+
+import org.infinispan.client.hotrod.RemoteCache;
+
+import io.opentelemetry.api.trace.SpanKind;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
+import io.quarkus.infinispan.client.Remote;
 
 @Path("/hello")
 public class QuarkusInsightsResource {
@@ -24,14 +26,6 @@ public class QuarkusInsightsResource {
    @Remote("greetings")
    RemoteCache<String, String> greetingsCache;
 
-   @Inject
-   @Remote("books")
-   RemoteCache<String, Book> booksCache;
-
-   @Inject
-   @Remote("books-indexed")
-   RemoteCache<String, Book> booksIndexed;
-
    @GET
    @Produces(MediaType.TEXT_PLAIN)
    public String hello() {
@@ -39,42 +33,14 @@ public class QuarkusInsightsResource {
       return "Hello Quarkus";
    }
 
-   @GET
-   @Path("/books")
+   @PUT
    @Produces(MediaType.TEXT_PLAIN)
-   public String books() {
-      Map<String, Book> generatedBooks = ModelGenerator.generateBooks();
-      booksCache.putAll(generatedBooks);
-      return "Books added";
+   @WithSpan(value = "wait-for-all-response-span", kind = SpanKind.CLIENT)
+   public List<Object> putAll() {
+      CompletableFuture[] promises = IntStream.range(0, 10).boxed()
+            .map(value -> greetingsCache.putAsync(value.toString(), Character.toString('A' + value)))
+            .toList().toArray(new CompletableFuture[0]);
+
+      return Arrays.stream(promises).map(item -> item.join()).toList();
    }
-
-   @GET
-   @Path("/books-indexed")
-   @Produces(MediaType.TEXT_PLAIN)
-   public String booksIndexed() {
-      Map<String, Book> generatedBooks = ModelGenerator.generateBooks();
-      booksIndexed.putAll(generatedBooks);
-      return "Books Indexed added";
-   }
-
-   @GET
-   @Path("/books-search")
-   @Produces(MediaType.TEXT_PLAIN)
-   public List<Book> booksSearch() {
-      QueryFactory queryFactory = Search.getQueryFactory(booksIndexed);
-      Query<Book> query = queryFactory.create("from insights.book b where b.description : :description");
-      query.setParameter("description", "Java");
-      return query.execute().list();
-   }
-
-   @GET
-   @Path("/authors-indexed")
-   @Produces(MediaType.TEXT_PLAIN)
-   public String authorsIndexed() {
-      Map<String, Book> generatedBooks = ModelGenerator.generateBooks();
-      booksIndexed.putAll(generatedBooks);
-      return "Authors Indexed added";
-   }
-
-
 }

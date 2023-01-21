@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<local-cache statistics="true">
+    <encoding media-type="application/x-protostream" />
+    <indexing enabled="true" storage="local-heap">
+        <indexed-entities>
+            <indexed-entity>insights.book</indexed-entity>
+        </indexed-entities>
+    </indexing>
+</local-cache>

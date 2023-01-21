@@ -1,9 +1,6 @@
-package org.infinispan.data;
+package org.infinispan.search;
 
 import io.quarkus.logging.Log;
-import org.infinispan.search.Author;
-import org.infinispan.search.Book;
-import org.infinispan.search.Review;
 
 import java.time.Instant;
 import java.util.Arrays;
@@ -11,7 +8,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class ModelGenerator {
@@ -90,17 +86,6 @@ public class ModelGenerator {
                Log.info(key + " --> " + reviews);
                return new Book(title, yearOfPublication, description, price,
                      new Author(authorFirstname, authorSurname, numberOfPublishedBooks), reviews);
-            }));
-   }
-
-   public static final Map<String, Author> generateAuthors() {
-      return Arrays.stream(BOOKS_DATA)
-            .collect(Collectors.toMap(bookData -> UUID.randomUUID().toString(), bookData -> {
-               String authorFirstname = (String) bookData[3];
-               String authorSurname = (String) bookData[4];
-               Integer numberOfPublishedBooks = (Integer) bookData[5];
-
-               return new Author(authorFirstname, authorSurname, numberOfPublishedBooks);
             }));
    }
 }
