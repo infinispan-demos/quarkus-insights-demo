@@ -88,6 +88,11 @@ quarkus.infinispan-client.cache.books.configuration-uri=books.yaml
 ./mvnw clean install
 ```
 
+9. Run a query test with the breakpoint
+
+* Open Infinispan console using Docker Desktop
+* See the query statistics
+
 ## Tracing to main
 
 1. Run Jaeger container
