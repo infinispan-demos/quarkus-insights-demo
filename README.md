@@ -49,33 +49,6 @@ add the property
 ## From the middle to index query
 
 1. Add indexing model:
-  * create the package `org.infinispan.search`
-  * add java classes: `Author`, `Book`, `Review`, `BooksSchema`
-
-2. Show the schemas on Infinispan console
-
-3. Create the cache `books` (startupMode => Purge, indexed entities => insights.book)
-  * download the file (xml)
-
-4. Copy file books.xml => main/resources/
-  * add to application.properties
-
-``` properties
-quarkus.infinispan-client.cache.books.configuration-uri=books.yaml
-```
-
-5. Create test/java directory
-  * create package `org.infinispan.search`
-  * copy `ModelGenerator` and `IndexedQueriesTest`
-
-6. Run the query test:
-``` sh
-./mvnw clean install
-```
-
-## From the middle to index query
-
-1. Add indexing model:
 * create the package `org.infinispan.search`
 * add java classes: `Author`, `Book`, `Review`, `BooksSchema`
 
@@ -114,6 +87,11 @@ quarkus.infinispan-client.cache.books.configuration-uri=books.yaml
 ``` sh
 ./mvnw clean install
 ```
+
+9. Run a query test with the breakpoint
+
+* Open Infinispan console using Docker Desktop
+* See the query statistics
 
 ## Tracing to main
 
