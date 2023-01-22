@@ -181,21 +181,27 @@ quarkus.infinispan-client.use-schema-registration=false
 quarkus.infinispan-client.cache.books.configuration-uri=books.yaml
 ```
 
-7.  Play with tests
-  * Create test/java directory
-  * Create package `org.infinispan.search`
-  * Copy `ModelGenerator` and `SearchTest`
+7. Copy `ModelGenerator` to `org.infinispan.search.generator`
+    * Copy `BookResource` to `org.infinispan`
+    * Compile and run dev mode
+    ```
+    ./mvnw compile quarkus:dev
+    ```
+    * Play with queries
+    ```
+    http PUT localhost:8080/books
+    http localhost:8080/books/description/java
+    ```
+    * Show the statistics
+    * Show you can do the same query from console
+
+8. Test showcases
+  * Copy `SearchTest` to `org.infinispan.search`
   * Show the test cases
-
-8. Run the query test
-``` sh
-./mvnw clean install
-```
-
-9. Run a query test with the breakpoint
-
-* Open Infinispan console using Docker Desktop
-* See the query statistics
+  * Run the query test
+  ``` sh
+    ./mvnw clean install
+  ```
 
 ## Tracing to main
 
