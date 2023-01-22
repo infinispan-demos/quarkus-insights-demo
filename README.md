@@ -135,23 +135,45 @@ quarkus.infinispan-client.devservices.tracing.exporter.otlp.endpoint=http://172.
 quarkus.opentelemetry.tracer.exporter.otlp.endpoint=http://localhost:4317
 ```
 
-4. Add method to the `QuarkusInsightsResource`
+4. Add methods to the `QuarkusInsightsResource` endpoint
 
 ``` java
 @PUT
+@Path("async/{calls}")
 @Produces(MediaType.TEXT_PLAIN)
-@WithSpan(value = "wait-for-all-response-span", kind = SpanKind.CLIENT)
-public List<Object> putAll() {
-  CompletableFuture[] promises = IntStream.range(0, 10).boxed()
+@WithSpan(value = "wait-for-async", kind = SpanKind.CLIENT)
+public String putAsync(@PathParam("calls") Integer calls) {
+  CompletableFuture[] promises = IntStream.range(0, calls).boxed()
         .map(value -> greetingsCache.putAsync(value.toString(), Character.toString('A' + value)))
         .toList().toArray(new CompletableFuture[0]);
 
-  return Arrays.stream(promises).map(item -> item.join()).toList();
+  CompletableFuture.allOf(promises).join();
+
+  return "Executed " + calls + " calls.";
+}
+
+@PUT
+@Path("bulk/{calls}")
+@Produces(MediaType.TEXT_PLAIN)
+@WithSpan(value = "wait-for-putAll", kind = SpanKind.CLIENT)
+public String putAll(@PathParam("calls") Integer calls) {
+  greetingsCache.putAll(IntStream.range(0, calls).boxed()
+        .collect(Collectors.toMap(value -> value.toString(), value -> Character.toString('A' + value))));
+
+  return "Executed " + calls + " calls.";
 }
 ```
 
-5. Curl the endpoint
+5. Build and run the dev mode:
 
-``` java
-curl -X PUT localhost:8080/hello -v
+``` sh
+./mvnw clean install 
+./mvnw quarkus:dev
+```
+
+6. Curl the endpoint
+
+``` sh
+http PUT localhost:8080/hello/async/10
+http PUT localhost:8080/hello/bulk/10
 ```
