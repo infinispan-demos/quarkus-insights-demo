@@ -1,4 +1,4 @@
-package org.infinispan.search;
+package org.infinispan.search.generator;
 
 import io.quarkus.logging.Log;
 
@@ -9,6 +9,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
+
+import org.infinispan.search.Author;
+import org.infinispan.search.Book;
+import org.infinispan.search.Review;
 
 public class ModelGenerator {
 
