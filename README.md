@@ -30,21 +30,125 @@ This project is based on the following repositories:
 ```bash
 http localhost:8080/hello 
 ```
+5. Adding fixed port
+
+```properties
+quarkus.infinispan-client.devservices.port=11223
+```
 
 ## Health Check
 
 1. Show that we have the Health Extension
 2. In the DEV UI access to the Health UI and show the Readiness Endpoint available
-3. Default enabled, can be disabled with
+3. Default enabled, can be disabled with the following property
 ```properties
-add the property
+quarkus.infinispan-client.health.enabled=false
 ```
 
 ## Create Caches with configuration
 
-1. Open the model 
+1. Open the model and annotate
 
-2. Create a ca
+```java
+public class Developer {
+   private String firstname;
+   private String lastName;
+   private String project;
+
+   @ProtoFactory
+   public Developer(String firstname, String lastName, String project) {
+      this.firstname = firstname;
+      this.lastName = lastName;
+      this.project = project;
+   }
+
+   @ProtoField(value = 1)
+   public String getFirstname() {
+      return firstname;
+   }
+
+   @ProtoField(value = 2)
+   public String getLastName() {
+      return lastName;
+   }
+
+   @ProtoField(value = 3)
+   public String getProject() {
+      return project;
+   }
+}
+```
+
+2. Create schema
+```java
+@AutoProtoSchemaBuilder(includeClasses = { Developer.class },
+      schemaFileName = "developers-schema.proto",
+      schemaPackageName = "insights")
+interface DevelopersSchema extends GeneratedSchema {
+
+}
+```
+3. Configure with the console a bounded cache and creare `developers.json`
+
+4. Configure in the properties
+```properties
+quarkus.infinispan-client.cache.developers.configuration-uri=developers.json
+```
+
+5. Configure near caching in the properties
+
+```properties
+quarkus.infinispan-client.cache.developers.near-cache-max-entries=20
+```
+
+7. Disable upload schema disable
+
+```properties
+quarkus.infinispan-client.use-schema-registration=false
+```
+
+
+## Use caching annotations
+
+1. List a developer
+
+```bash
+http  localhost:8080/hello/wburns
+http post localhost:8080/hello/karesti firstName=katia lastName=aresti project=infinispan
+http  localhost:8080/hello/karesti
+```
+
+2. Check service call all the time
+```bash
+http  localhost:8080/hello/wburns
+```
+
+3. Add `@CacheResult` and check calls and the console
+
+````java
+   @CacheResult(cacheName = DevelopersService.DEVELOPERS_CACHE_NAME)
+   public Developer getDeveloper(String nickname) {
+      Log.info("Getting from service call " + nickname);
+      return data.get(nickname);
+   }
+````
+
+4. Add a developer check the console
+```bash 
+http post localhost:8080/hello/karesti firstName=katia lastName=aresti project=infinispan
+http  localhost:8080/hello/karesti 
+http  localhost:8080/hello/karesti 
+```
+
+5. Remove and use `@CacheInvalidate` and check the console
+````java
+ @CacheInvalidate(cacheName = DevelopersService.DEVELOPERS_CACHE_NAME)
+   public void removeDeveloper(String nickname) {
+      data.remove(nickname);
+   }
+````
+
+We can also invalidate all
 
 ## From the middle to index query
 
