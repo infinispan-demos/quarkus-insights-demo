@@ -79,23 +79,38 @@ quarkus.infinispan-client.cache.books.configuration-uri=books.yaml
 * create the package `org.infinispan.search`
 * add java classes: `Author`, `Book`, `Review`, `BooksSchema`
 
-2. Show the schemas on Infinispan console
+2. Build and star the dev mode
 
-3. Create the cache `books` (startupMode => Purge, indexed entities => insights.book)
-* download the file (xml)
+``` sh
+./mvnw clean install 
+./mvnw quarkus:dev
+```
 
-4. Copy file books.xml => main/resources/
+3. Show the schemas on Infinispan console
+
+4. Highlight the fact that in production you should set:
+
+``` properties
+quarkus.infinispan-client.use-schema-registration=false
+```
+
+5. Create the cache `books` (startupMode => Replicated, None, local-indexed, indexed entities => insights.book)
+* download the file (yaml)
+
+6. Copy file books.yaml => main/resources/
 * add to application.properties
 
 ``` properties
 quarkus.infinispan-client.cache.books.configuration-uri=books.yaml
 ```
 
-5. Create test/java directory
-* create package `org.infinispan.search`
-* copy `ModelGenerator` and `IndexedQueriesTest`
+7.  Play with tests
+  * Create test/java directory
+  * Create package `org.infinispan.search`
+  * Copy `ModelGenerator` and `SearchTest`
+  * Show the test cases
 
-6. Run the query test
+8. Run the query test
 ``` sh
 ./mvnw clean install
 ```
