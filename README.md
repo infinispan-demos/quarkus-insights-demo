@@ -2,7 +2,7 @@
 
 ### Slides
 
-[Quarkus Insights #115 - What's new in Infinispan.pdf]([https://github.com/infinispan-demos/quarkus-insights-demo/tree/main/[23-01-23]_Quarkus_Insights_115_Whats_new_in_Infinispan.pdf)
+[Quarkus Insights #115 - What's new in Infinispan.pdf](https://github.com/infinispan-demos/quarkus-insights-demo/tree/main/[23-01-23]_Quarkus_Insights_115_Whats_new_in_Infinispan.pdf)
 
 ### Based repositories
 This project is based on the following repositories:
@@ -31,7 +31,7 @@ This project is based on the following repositories:
         return "Hello Quarkus";
     }
 ```
-4. Command line 
+4. Command line
 ```bash
 http localhost:8080/hello 
 ```
@@ -107,7 +107,7 @@ interface DevelopersSchema extends GeneratedSchema {
 
 }
 ```
-5. Run again the command line and go to the console 
+5. Run again the command line and go to the console
 
 ```bash
 http localhost:8080/hello 
@@ -137,7 +137,7 @@ quarkus.infinispan-client.use-schema-registration=false
 
 ## Use caching annotations
 
-1. List a developer
+1. Get a developer
 
 ```bash
 http  localhost:8080/hello/wburns
@@ -166,8 +166,13 @@ http post localhost:8080/hello/karesti firstName=katia lastName=aresti project=i
 http  localhost:8080/hello/karesti 
 http  localhost:8080/hello/karesti 
 ```
+3. Remove the developer and check the console is still there
+```bash 
+http delete localhost:8080/hello/karesti 
+http  localhost:8080/hello/karesti 
+```
 
-5. Remove and use `@CacheInvalidate` and check the console
+4. Use `@CacheInvalidate`, retry and check the console
 ````java
  @CacheInvalidate(cacheName = DevelopersService.DEVELOPERS_CACHE_NAME)
    public void removeDeveloper(String nickname) {
@@ -175,9 +180,15 @@ http  localhost:8080/hello/karesti
    }
 ````
 
-We can also invalidate all
+```bash 
+http delete localhost:8080/hello/karesti 
+http  localhost:8080/hello/wburns 
+http  localhost:8080/hello/ttarrant 
+```
 
-## From the middle to index query
+5. Use `@CacheInvalidate`, to remove all and check the console
+
+### Search and Indexing
 
 1. Add indexing model:
 * create the package `org.infinispan.search`
@@ -208,25 +219,25 @@ quarkus.infinispan-client.cache.books.configuration-uri=books.yaml
 ```
 
 7. Copy `ModelGenerator` to `org.infinispan.search.generator`
-    * Copy `BookResource` to `org.infinispan`
-    * Compile and run dev mode
+   * Copy `BookResource` to `org.infinispan`
+   * Compile and run dev mode
     ```
     ./mvnw compile quarkus:dev
     ```
-    * Play with queries
+   * Play with queries
     ```
     http PUT localhost:8080/books
     http localhost:8080/books/description/java
     ```
-    * Show the statistics
-    * Show you can do the same query from console
-    ``` from insights.book b where b.description : 'concurrency' ```
+   * Show the statistics
+   * Show you can do the same query from console
+     ``` from insights.book b where b.description : 'concurrency' ```
 
 8. Test showcases
-  * Copy `SearchTest` to `org.infinispan.search`
-  * Show the test cases
+* Copy `SearchTest` to `org.infinispan.search`
+* Show the test cases
 
-## Tracing to main
+### Tracing to main
 
 1. Run Jaeger container
 
