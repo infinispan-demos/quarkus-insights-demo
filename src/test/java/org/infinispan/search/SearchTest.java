@@ -28,72 +28,64 @@ import io.quarkus.test.junit.QuarkusTest;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class SearchTest {
 
-   @Inject
-   @Remote("books")
-   RemoteCache<String, Book> cache;
+   @BeforeAll
+   public void beforeAll() {
+      // assert cache instance injected
 
-   private QueryFactory queryFactory;
+      // cleanup and load data
+
+      // init query factory
+   }
 
    @Test
    public void fulltextQueries() {
-      Query<Book> query = queryFactory.create("from insights.book b where b.description : :description");
-      query.setParameter("description", "Java");
+      // Query
 
-      QueryResult<Book> result = query.execute();
-      assertThat(result.hitCount()).hasValue(5);
-      assertThat(result.list()).extracting("title").containsExactlyInAnyOrder(EFFECTIVE, PRACTICE, UTIL, MEMORY, PERFORMANCE);
+      // Execute
+
+      // Assert Hit Count
+
+      // Assert Books
    }
 
    @Test
    public void rangedQueries_orderBy() {
-      Query<Book> query = queryFactory.create("from insights.book b where b.price < 70.00 order by b.yearOfPublication desc");
+      // Query
 
-      QueryResult<Book> result = query.execute();
-      assertThat(result.hitCount()).hasValue(4);
-      assertThat(result.list()).extracting("title").containsExactly(MICROSERVICES, PERFORMANCE, EFFECTIVE, UTIL);
+      // Execute
+
+      // Assert Hit Count
+
+      // Assert Titles
    }
 
    @Test
    public void nestedQueries_projection() {
-      Query<Object[]> query = queryFactory.create("select b.title, b.yearOfPublication from insights.book b where b.reviews.content : 'nice'");
-      QueryResult<Object[]> result = query.execute();
+      // Query projection
 
-      assertThat(result.list()).map(objects -> objects[0]).containsExactlyInAnyOrder(PRACTICE, UTIL, MEMORY, MULTIPROCESSOR);
-      assertThat(result.list()).map(objects -> objects[1]).containsExactlyInAnyOrder(2006, 2015, 2022, 2020);
+      // Execute
+
+      // Assert Hit Count
+
+      // Assert Titles
+
+      // Assert Years
    }
 
    @Test
    public void testPagination() {
-      QueryFactory queryFactory = Search.getQueryFactory(cache);
-      Query<Book> query = queryFactory.create("from insights.book b order by title");
-      QueryResult<Book> result;
-      query.startOffset(0);
+      // Query pagination
 
-      // page 1
-      query.maxResults(3);
-      result = query.execute();
-      assertThat(result.hitCount()).hasValue(7);
-      assertThat(result.list()).extracting("title").containsExactly(EFFECTIVE, PRACTICE, MEMORY);
+      // Execute
 
-      // page 2
-      query.startOffset(3);
-      result = query.execute();
-      assertThat(result.hitCount()).hasValue(7);
-      assertThat(result.list()).extracting("title").containsExactly(PERFORMANCE, UTIL, MICROSERVICES);
+      // Assert Hit Count
 
-      // page3
-      query.startOffset(6);
-      result = query.execute();
-      assertThat(result.hitCount()).hasValue(7);
-      assertThat(result.list()).extracting("title").containsExactly(MULTIPROCESSOR);
+      // Assert page 1
+
+      // Assert page 2
+
+      // Assert page 3
+
    }
 
-   @BeforeAll
-   public void beforeAll() {
-      assertThat(cache).isNotNull(); // instance is injected
-      cache.clear();
-      cache.putAll(ModelGenerator.generateBooks());
-
-      queryFactory = Search.getQueryFactory(cache);
-   }
 }
