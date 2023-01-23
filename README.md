@@ -150,18 +150,6 @@ http  localhost:8080/hello/karesti
 
 We can also invalidate all
 
-## From the middle to index query
-
-1. Add indexing model:
-* create the package `org.infinispan.search`
-* add java classes: `Author`, `Book`, `Review`, `BooksSchema`
-
-2. Build and star the dev mode
-
-``` sh
-./mvnw compile quarkus:dev
-```
-
 3. Show the schemas on Infinispan console
 
 4. Highlight the fact that in production you should set:
@@ -181,23 +169,26 @@ quarkus.infinispan-client.cache.books.configuration-uri=books.yaml
 ```
 
 7. Copy `ModelGenerator` to `org.infinispan.search.generator`
-    * Copy `BookResource` to `org.infinispan`
-    * Compile and run dev mode
-    ```
-    ./mvnw compile quarkus:dev
-    ```
-    * Play with queries
-    ```
-    http PUT localhost:8080/books
-    http localhost:8080/books/description/java
-    ```
-    * Show the statistics
-    * Show you can do the same query from console
-    ``` from insights.book b where b.description : 'concurrency' ```
+  * Copy `BookResource` to `org.infinispan`
+  * Compile and run dev mode
+  ```
+  ./mvnw compile quarkus:dev
+  ```
+  * Play with queries
+  ```
+  http PUT localhost:8080/books
+  http localhost:8080/books/description/java
+  ```
+  * Show the statistics
+  * Show you can do the same query from console
 
 8. Test showcases
   * Copy `SearchTest` to `org.infinispan.search`
   * Show the test cases
+  * Run the query test
+  ``` sh
+    ./mvnw clean install
+  ```
 
 ## Tracing to main
 
@@ -266,7 +257,8 @@ public String putAll(@PathParam("calls") Integer calls) {
 5. Build and run the dev mode:
 
 ``` sh
-./mvnw compile quarkus:dev
+./mvnw clean install 
+./mvnw quarkus:dev
 ```
 
 6. Curl the endpoint
