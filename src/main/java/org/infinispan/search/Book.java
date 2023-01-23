@@ -14,8 +14,6 @@ import org.infinispan.protostream.annotations.ProtoName;
 
 import java.util.List;
 
-@Indexed
-@ProtoName("book")
 public class Book {
 
    private String title;
@@ -35,37 +33,31 @@ public class Book {
       this.reviews = reviews;
    }
 
-   @Keyword(normalizer = "lowercase", projectable = true)
    @ProtoField(value = 1)
    public String getTitle() {
       return title;
    }
 
-   @Basic
    @ProtoField(value = 2)
    public Integer getYearOfPublication() {
       return yearOfPublication;
    }
 
-   @Text(termVector = TermVector.WITH_POSITIONS_OFFSETS_PAYLOADS, norms = false)
    @ProtoField(value = 3)
    public String getDescription() {
       return description;
    }
 
-   @Decimal(decimalScale = 2, aggregable = true)
    @ProtoField(value = 4)
    public Float getPrice() {
       return price;
    }
 
-   @Embedded(structure = Structure.FLATTENED)
    @ProtoField(value = 5)
    public Author getAuthor() {
       return author;
    }
 
-   @Embedded(structure = Structure.NESTED)
    @ProtoField(value = 6)
    public List<Review> getReviews() {
       return reviews;
