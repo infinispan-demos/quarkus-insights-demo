@@ -1,8 +1,5 @@
 package org.infinispan.bounded;
 
-import org.infinispan.protostream.annotations.ProtoFactory;
-import org.infinispan.protostream.annotations.ProtoField;
-
 import java.util.Objects;
 
 public class Developer {
@@ -13,24 +10,20 @@ public class Developer {
    public Developer() {
    }
 
-   @ProtoFactory
    public Developer(String firstName, String lastName, String project) {
       this.firstName = firstName;
       this.lastName = lastName;
       this.project = project;
    }
 
-   @ProtoField(value = 1)
    public String getFirstName() {
       return firstName;
    }
 
-   @ProtoField(value = 2)
    public String getLastName() {
       return lastName;
    }
 
-   @ProtoField(value = 3)
    public String getProject() {
       return project;
    }
