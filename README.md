@@ -159,8 +159,7 @@ We can also invalidate all
 2. Build and star the dev mode
 
 ``` sh
-./mvnw clean install 
-./mvnw quarkus:dev
+./mvnw compile quarkus:dev
 ```
 
 3. Show the schemas on Infinispan console
@@ -194,14 +193,11 @@ quarkus.infinispan-client.cache.books.configuration-uri=books.yaml
     ```
     * Show the statistics
     * Show you can do the same query from console
+    ``` from insights.book b where b.description : 'concurrency' ```
 
 8. Test showcases
   * Copy `SearchTest` to `org.infinispan.search`
   * Show the test cases
-  * Run the query test
-  ``` sh
-    ./mvnw clean install
-  ```
 
 ## Tracing to main
 
@@ -270,8 +266,7 @@ public String putAll(@PathParam("calls") Integer calls) {
 5. Build and run the dev mode:
 
 ``` sh
-./mvnw clean install 
-./mvnw quarkus:dev
+./mvnw compile quarkus:dev
 ```
 
 6. Curl the endpoint
