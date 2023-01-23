@@ -141,8 +141,6 @@ quarkus.infinispan-client.use-schema-registration=false
 
 ```bash
 http  localhost:8080/hello/wburns
-http post localhost:8080/hello/karesti firstName=katia lastName=aresti project=infinispan
-http  localhost:8080/hello/karesti
 ```
 
 2. Check service call all the time
@@ -153,40 +151,34 @@ http  localhost:8080/hello/wburns
 3. Add `@CacheResult` and check calls and the console
 
 ````java
-   @CacheResult(cacheName = DevelopersService.DEVELOPERS_CACHE_NAME)
-   public Developer getDeveloper(String nickname) {
-      Log.info("Getting from service call " + nickname);
-      return data.get(nickname);
-   }
+   @CacheResult(cacheName = "developers")
 ````
 
-4. Add a developer check the console
+4. Remove the developer and check the console is still there
+
 ```bash 
-http post localhost:8080/hello/karesti firstName=katia lastName=aresti project=infinispan
-http  localhost:8080/hello/karesti 
-http  localhost:8080/hello/karesti 
+http delete localhost:8080/hello/wburns 
 ```
-3. Remove the developer and check the console is still there
-```bash 
-http delete localhost:8080/hello/karesti 
-http  localhost:8080/hello/karesti 
+
+```bash
+http  localhost:8080/hello/wburns  
 ```
 
 4. Use `@CacheInvalidate`, retry and check the console
 ````java
- @CacheInvalidate(cacheName = DevelopersService.DEVELOPERS_CACHE_NAME)
-   public void removeDeveloper(String nickname) {
-      data.remove(nickname);
-   }
+ @CacheInvalidate(cacheName = "developers")
 ````
 
 ```bash 
-http delete localhost:8080/hello/karesti 
-http  localhost:8080/hello/wburns 
-http  localhost:8080/hello/ttarrant 
+http delete localhost:8080/hello/wburns 
 ```
 
-5. Use `@CacheInvalidate`, to remove all and check the console
+```bash
+http  localhost:8080/hello/wburns  
+```
+
+5. Use `@CacheInvalidateAll`, to remove all and check the console
+
 
 ### Search and Indexing
 
