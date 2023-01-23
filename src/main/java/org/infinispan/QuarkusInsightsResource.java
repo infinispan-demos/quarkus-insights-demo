@@ -19,8 +19,6 @@ import org.infinispan.bounded.Developer;
 import org.infinispan.bounded.DevelopersService;
 import org.infinispan.client.hotrod.RemoteCache;
 
-import io.opentelemetry.api.trace.SpanKind;
-import io.opentelemetry.instrumentation.annotations.WithSpan;
 import io.quarkus.infinispan.client.Remote;
 
 @Path("/hello")
@@ -76,15 +74,16 @@ public class QuarkusInsightsResource {
       return Response.ok().build();
    }
 
-   // Search
-
+   /*************************
+    * TRACING async and bulk
+    *************************/
    @PUT
    @Path("async/{calls}")
    @Produces(MediaType.TEXT_PLAIN)
-   @WithSpan(value = "wait-for-async", kind = SpanKind.CLIENT)
    public String putAsync(@PathParam("calls") Integer calls) {
       CompletableFuture[] promises = IntStream.range(0, calls).boxed()
-            .map(value -> greetingsCache.putAsync(value.toString(), Character.toString('A' + value)))
+            .map(value -> greetingsCache.putAsync(value.toString(),
+                  Character.toString('A' + value)))
             .toList().toArray(new CompletableFuture[0]);
 
       CompletableFuture.allOf(promises).join();
@@ -95,10 +94,10 @@ public class QuarkusInsightsResource {
    @PUT
    @Path("bulk/{calls}")
    @Produces(MediaType.TEXT_PLAIN)
-   @WithSpan(value = "wait-for-putAll", kind = SpanKind.CLIENT)
    public String putAll(@PathParam("calls") Integer calls) {
       greetingsCache.putAll(IntStream.range(0, calls).boxed()
-            .collect(Collectors.toMap(value -> value.toString(), value -> Character.toString('A' + value))));
+            .collect(Collectors.toMap(value -> value.toString(),
+                  value -> Character.toString('A' + value))));
 
       return "Executed " + calls + " calls.";
    }
