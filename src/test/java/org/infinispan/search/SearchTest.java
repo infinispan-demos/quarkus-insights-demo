@@ -1,27 +1,9 @@
 package org.infinispan.search;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.infinispan.search.generator.ModelGenerator.EFFECTIVE;
-import static org.infinispan.search.generator.ModelGenerator.MEMORY;
-import static org.infinispan.search.generator.ModelGenerator.MICROSERVICES;
-import static org.infinispan.search.generator.ModelGenerator.MULTIPROCESSOR;
-import static org.infinispan.search.generator.ModelGenerator.PERFORMANCE;
-import static org.infinispan.search.generator.ModelGenerator.PRACTICE;
-import static org.infinispan.search.generator.ModelGenerator.UTIL;
-
-import javax.inject.Inject;
-
-import org.infinispan.client.hotrod.RemoteCache;
-import org.infinispan.client.hotrod.Search;
-import org.infinispan.query.dsl.Query;
-import org.infinispan.query.dsl.QueryFactory;
-import org.infinispan.query.dsl.QueryResult;
-import org.infinispan.search.generator.ModelGenerator;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
-import io.quarkus.infinispan.client.Remote;
 import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
