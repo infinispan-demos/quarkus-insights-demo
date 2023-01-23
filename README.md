@@ -1,13 +1,18 @@
-# library Project
+# Quarkus Insights 23-01-23 Demo Project
 
+### Slides
+
+[Quarkus Insights #115 - What's new in Infinispan.pdf]([https://github.com/infinispan-demos/quarkus-insights-demo/tree/main/[23-01-23]_Quarkus_Insights_115_Whats_new_in_Infinispan.pdf)
+
+### Based repositories
 This project is based on the following repositories:
 - [Infinispan Quarkus Quickstart](https://github.com/quarkusio/quarkus-quickstarts/tree/main/infinispan-client-quickstart)
 - [Fabio Massimo Ercoli Quarkus playground](https://github.com/fax4ever/quarkus-play)
 
 
-# Steps Building
+## Demo Steps
 
-## Dev services
+### Dev services
 1. Start Quarkus with Docker running
 ```bash
 ./mvnw quarkus:dev
@@ -36,7 +41,7 @@ http localhost:8080/hello
 quarkus.infinispan-client.devservices.port=11223
 ```
 
-## Health Check
+### Health Check
 
 1. Show that we have the Health Extension
 2. In the DEV UI access to the Health UI and show the Readiness Endpoint available
@@ -45,9 +50,23 @@ quarkus.infinispan-client.devservices.port=11223
 quarkus.infinispan-client.health.enabled=false
 ```
 
-## Create Caches with configuration
+### Create Caches with configuration
 
-1. Open the model and annotate
+1. Change the service to use a put new Developer
+```java
+@Inject
+@Remote("greetings")
+RemoteCache<String, Developer> greetingsCache;
+
+greetingsCache.put("hcummins", new Developer("Holly", "Cummins", "Quarkus"));
+```
+
+2. Test command line again and check marshalling error
+```bash
+http localhost:8080/hello 
+```
+
+3. Open the model and annotate
 
 ```java
 public class Developer {
@@ -79,7 +98,7 @@ public class Developer {
 }
 ```
 
-2. Create schema
+4. Create the schema
 ```java
 @AutoProtoSchemaBuilder(includeClasses = { Developer.class },
       schemaFileName = "developers-schema.proto",
@@ -88,14 +107,22 @@ interface DevelopersSchema extends GeneratedSchema {
 
 }
 ```
-3. Configure with the console a bounded cache and creare `developers.json`
+5. Run again the command line and go to the console 
 
-4. Configure in the properties
+```bash
+http localhost:8080/hello 
+```
+
+6. Explain that we want to create a new cache that will hold max 3 entries.
+
+8. Configure with the console a bounded cache and create `developers.json`
+
+9. Configure in the properties
 ```properties
 quarkus.infinispan-client.cache.developers.configuration-uri=developers.json
 ```
 
-5. Configure near caching in the properties
+5. Explain the configuration of the near caching in the properties
 
 ```properties
 quarkus.infinispan-client.cache.developers.near-cache-max-entries=20
