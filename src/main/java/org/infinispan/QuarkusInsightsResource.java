@@ -15,8 +15,6 @@ public class QuarkusInsightsResource {
    }
 
 
-
-
 //   @GET
 //   @Produces(MediaType.TEXT_PLAIN)
 //   @Path("/{nickname}")
@@ -26,14 +24,6 @@ public class QuarkusInsightsResource {
 //         return Response.status(Response.Status.NOT_FOUND).build();
 //      }
 //      return Response.ok(developersService.getDeveloper(nickname)).build();
-//   }
-//
-//   @POST
-//   @Produces(MediaType.TEXT_PLAIN)
-//   @Path("/{nickname}")
-//   public Response createDeveloper(@PathParam("nickname") String nickname, Developer developer) {
-//      developersService.addDeveloper(nickname, developer);
-//      return Response.ok().build();
 //   }
 //
 //
