@@ -1,5 +1,6 @@
 package org.infinispan;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -20,25 +21,15 @@ import io.quarkus.logging.Log;
 @Path("books")
 public class BookResource {
 
-   @Inject
-   @Remote("books")
-   RemoteCache<String, Book> booksCache;
-
    @PUT
    public void initData() {
-      booksCache.clear();
-      booksCache.putAll(ModelGenerator.generateBooks());
+//      booksCache.clear();
+//      booksCache.putAll(ModelGenerator.generateBooks());
    }
 
    @GET
    @Path("/description/{term}")
    public List<Book> query(@PathParam("term") String term) {
-      Query<Book> query = Search.getQueryFactory(booksCache)
-            .create("from insights.book b where b.description : :description");
-      query.setParameter("description", term);
-
-      List<Book> books = query.execute().list();
-      Log.info(books);
-      return books;
+      return new ArrayList<>();
    }
 }
