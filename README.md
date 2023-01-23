@@ -137,7 +137,7 @@ quarkus.infinispan-client.use-schema-registration=false
 
 ## Use caching annotations
 
-1. List a developer
+1. Get a developer
 
 ```bash
 http  localhost:8080/hello/wburns
@@ -166,8 +166,13 @@ http post localhost:8080/hello/karesti firstName=katia lastName=aresti project=i
 http  localhost:8080/hello/karesti 
 http  localhost:8080/hello/karesti 
 ```
+3. Remove the developer and check the console is still there
+```bash 
+http delete localhost:8080/hello/karesti 
+http  localhost:8080/hello/karesti 
+```
 
-5. Remove and use `@CacheInvalidate` and check the console
+4. Use `@CacheInvalidate`, retry and check the console
 ````java
  @CacheInvalidate(cacheName = DevelopersService.DEVELOPERS_CACHE_NAME)
    public void removeDeveloper(String nickname) {
@@ -175,9 +180,15 @@ http  localhost:8080/hello/karesti
    }
 ````
 
-We can also invalidate all
+```bash 
+http delete localhost:8080/hello/karesti 
+http  localhost:8080/hello/wburns 
+http  localhost:8080/hello/ttarrant 
+```
 
-## From the middle to index query
+5. Use `@CacheInvalidate`, to remove all and check the console
+
+### Search and Indexing
 
 1. Add indexing model:
 * create the package `org.infinispan.search`
@@ -226,7 +237,7 @@ quarkus.infinispan-client.cache.books.configuration-uri=books.yaml
   * Copy `SearchTest` to `org.infinispan.search`
   * Show the test cases
 
-## Tracing to main
+### Tracing to main
 
 1. Run Jaeger container
 
