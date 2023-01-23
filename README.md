@@ -2,7 +2,7 @@
 
 ### Slides
 
-[Quarkus Insights #115 - What's new in Infinispan.pdf]([https://github.com/infinispan-demos/quarkus-insights-demo/tree/main/[23-01-23]_Quarkus_Insights_115_Whats_new_in_Infinispan.pdf)
+[Quarkus Insights #115 - What's new in Infinispan.pdf](https://github.com/infinispan-demos/quarkus-insights-demo/tree/main/[23-01-23]_Quarkus_Insights_115_Whats_new_in_Infinispan.pdf)
 
 ### Based repositories
 This project is based on the following repositories:
